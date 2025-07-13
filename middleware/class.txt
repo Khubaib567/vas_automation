@@ -1,0 +1,2 @@
+table > tbody > tr:nth-child(2) > td > div.widget-match-header__scorers-names widget-match-header__scorers-names--empty widget-
+  match-header__scorers-names--home
