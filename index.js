@@ -2,13 +2,14 @@ const prompt = require('prompt-sync')();
 const {get_live_match,get_past_matches,get_next_matches,get_match_summary} = require('./middleware/match-middleware/get_matches')    
 const auth = require('./middleware/utils/authClient');
 const runSocket = require('../vas_automation/socket');
-const socketServer = require('../vas_automation/socket');
+const serverSocket = require('../vas_automation/socket');
 
 
 
 const vasAutomate = async () => {
     auth();
-    let result;
+    let result = await serverSocket();
+    console.log(result)
     if (result === true) {
         console.log(`Welcome to FootBall Search Engine
     1-Get Live Matches 

@@ -2,60 +2,77 @@ const { createServer } = require('http');
 const jwt = require('jsonwebtoken');
 const { Server } = require('socket.io');
 
-// FALL BACK TO HTTP SERVER IF SERVER GOES DOWN.
+// Create HTTP server and Socket.IO instance
 const httpServer = createServer();
-const socket = new Server(httpServer , {
-    cors:{
-        origin:'http://localhost:3000'
+const socket = new Server(httpServer, {
+    cors: {
+        origin: 'http://localhost:3000'
+    }
+});
+
+// Promisify JWT verify
+const verifyToken = (token, secret) => {
+    return new Promise((resolve, reject) => {
+        jwt.verify(token, secret, (err, user) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(user);
+            }
+        });
+    });
+};
+
+// Promisify HTTP server listen
+const startServer = (server, port) => {
+    return new Promise((resolve, reject) => {
+        server.listen(port, () => {
+            console.log(`Server is connected!`);
+            resolve(true);
+        }).on('error', (err) => {
+            reject(err);
+        });
+    });
+};
+
+module.exports = serverSocket = () => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            // Start the HTTP server
+            await startServer(httpServer, 4000);
+
+            // Set up Socket.IO connection handler
+            socket.on('connect', (socket) => {
+                // Emit initial message
+                socket.emit('message', 'Hello');
+
+                // Handle form data submission
+                socket.on('submitFormData', async (formData) => {
+                    try {
+                        const { code } = formData;
+                        await verifyToken(code, process.env.JWT);
+                        socket.emit('formResponse', {
+                            message: 'Token Has Verified!',
+                            status: true
+                        });
+                        resolve(true); // Resolve with true on successful verification
+                    } catch (err) {
+                        socket.emit('formResponse', {
+                            message: 'Not authorized, token failed!',
+                            status: false
+                        });
+                        resolve(false); // Resolve with false on failed verification
+                    }
+                });
+
+                // Handle disconnection
+                socket.on('disconnect', () => {
+                    console.log('User disconnected');
+                });
+            });
+        } catch (error) {
+            console.error('Internal Server Error:', error);
+            reject(error); // Reject promise on server error
         }
-});
-
-let status;
-
-httpServer.listen(4000 , () => {
-        console.log('Server is connected!');
-})
-  
-socket.on('connect' , (socket) => {
-
-    // console.log(socket);
-    socket.emit('message' , 'Hello');
-
-    // socket.on("message" , (data) =>{
-    //    console.log(data)
-    // })
-
-    // Listen for a custom event named 'submitFormData'
-    socket.on('submitFormData', async (formData) => {
-    // console.log('Received form data:', formData);
-    const { code } = formData;
-    // console.log(typeof(process.env.JWT))
-    try {
-            status = await jwt.verify(code , process.env.JWT)
-            // Optionally, send a response back to the client
-            socket.emit('formResponse', {
-            status: status,
-            message: `Your pin code, ${code} has verified!`,
-            });
-    } catch (error) {
-            // console.error('Error during authentication: ' , error);
-            socket.emit('formResponse', {
-            status: status,
-            message: `Your pin code, ${code} has not verified!`,
-            });
-    } 
-     
     });
-
-     // Handle disconnection
-    socket.on('disconnect', () => {
-        console.log('User disconnected');
-    });
-
-});
-
-
- 
-
-
-
+};
