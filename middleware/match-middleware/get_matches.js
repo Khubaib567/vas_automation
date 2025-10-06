@@ -1,11 +1,11 @@
 // Load dotenv only in non-production
-if (process.env.NODE !== 'production') {
-    require('dotenv').config();
-}
+// if (process.env.NODE !== 'production') {
+//     require('dotenv').config();
+// }
 
 // IMPORT LIBRARIES & MODULES
-const cheerio = require('cheerio');
-const request = require('request');
+// const cheerio = require('cheerio');
+// const request = require('request');
 const csvParser = require('../utils/csv-parser');
 const jsonParser = require('../utils/json-parser');
 const fs = require('fs');

@@ -1,5 +1,5 @@
 const fs = require("fs");
-const { parse } = require("csv-parse");
+// const { parse } = require("csv-parse");
 
 module.exports =  getJSON = (csv_file) =>{
     return new Promise((resolve,reject)=>{ 

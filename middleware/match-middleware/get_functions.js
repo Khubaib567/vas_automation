@@ -1,11 +1,11 @@
 // matchService.js
-const dotenv = require("dotenv");
-const axios = require("axios");
-const cheerio = require("cheerio");
+// const dotenv = require("dotenv");
+// const axios = require("axios");
+// const cheerio = require("cheerio");
 
-if (process.env.NODE_ENV !== "production") {
-  dotenv.config();
-}
+// if (process.env.NODE_ENV !== "production") {
+//   dotenv.config();
+// }
 
 // LOOKUP TABLE
 const league_lookup_table = {
