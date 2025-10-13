@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Authentication Required!</title>
+</head>
+<body style="font-family: Arial, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; background-color: #f0f2f5;">
+  <div style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); width: 100%; max-width: 400px;">
+    <h1 style="color: #333; text-align: center; margin-bottom: 20px;">Form Data</h1>
+    <form action="/" method="post" id="myForm" style="display: flex; flex-direction: column; gap: 15px;">
+      <label for="email" style="color: #333; font-size: 16px;">Enter your Email Address to Access the Application:</label>
+      <input 
+        type="email" 
+        id="email" 
+        name="email" 
+        required 
+        style="padding: 10px; font-size: 16px; border: 1px solid #ccc; border-radius: 4px; outline: none;"
+        placeholder="example@domain.com"
+      />
+      <button 
+        type="submit" 
+        style="padding: 10px; font-size: 16px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; transition: background-color 0.2s;"
+        onmouseover="this.style.backgroundColor='#0056b3'"
+        onmouseout="this.style.backgroundColor='#007bff'"
+      >Submit</button>
+    </form>
+    <div id="responseMessage" style="margin-top: 15px; color: #333; text-align: center;"></div>
+  </div>
+  <script src="https://cdn.socket.io/4.8.1/socket.io.min.js" integrity="sha384-mkQ3/7FUtcGyoppY6bz/PORYoGqOl7/aSUMn2ymDOJcapfS6PHqxhRTMh1RR0Q6+" crossorigin="anonymous"></script>
+  <script src="./index.js"></script>
+</body>
+</html>
