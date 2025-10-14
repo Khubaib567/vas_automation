@@ -1,3 +1,5 @@
+
+const prompt = require('prompt-sync')();
 const {get_live_match,get_past_matches,get_next_matches,get_match_summary} = require('../middleware/match-middleware/get_matches')    
 
 

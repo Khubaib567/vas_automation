@@ -2,7 +2,7 @@
 const jwt = require('jsonwebtoken');
 const { Server } = require('socket.io');
 const crypto = require('crypto')
-const {generateJwtToken , sendVerificationEmail } = require("./utils/email-sender");
+const {generateJwtToken , sendVerificationEmail } = require("./email-sender");
 let isListening = false; // Track listening state
 
 // Create HTTP server and Socket.IO instance
@@ -14,7 +14,7 @@ const server = http.createServer(app);
 
 const socket = new Server(server, {
     cors: {
-        origin: 'http://localhost:3000'
+        origin: ['http://localhost:3000' , 'http://127.0.0.1:3000']
     }
 });
 
@@ -32,22 +32,7 @@ const startServer = (server, port) => {
     });
 };
 
-const closeServer = (server) => {
-    return new Promise((resolve, reject) => {
-        server.close((err) => {
-            if (err) {
-                reject(err);
-            } else {
-                console.log('Server is closed!');
-                resolve(true);
-            }
-        });
-
-        // console.log('Server is Closed')
-    });
-};
-
-const serverSocket = () => {
+module.exports = serverSocket = () => {
     return new Promise(async (resolve, reject) => {
         try {
             // Start the HTTP server
@@ -76,7 +61,6 @@ const serverSocket = () => {
                         });
 
 
-                    //    await closeServer(server);
                        resolve(true); // Resolve with true on successful verification
 
                     } catch (err) {
@@ -84,16 +68,18 @@ const serverSocket = () => {
                             message: 'Bad Request or Internal Server Error!',
                             status: false
                         });
-                        resolve(false); // Resolve with false on failed verification
+                        reject(false); // Resolve with false on failed verification
+        
                     }
+                });
 
+                // Handle disconnection
+                socket.on('disconnect', () => {
+                    console.log('User disconnected');
                 });
             });
                
-            // Handle disconnection
-            socket.on('disconnect', () => {
-                console.log('User disconnected');
-            });
+            
         } catch (error) {
             console.error('Internal Server Error:', error);
             reject(error); // Reject promise on server error
@@ -101,46 +87,6 @@ const serverSocket = () => {
     });
 };
 
-
-const verfiyEmailSocket = () =>{
-    return new Promise(async(resolve,reject) =>{
-        try {
-
-            // await startServer(server, 4000);
-            socket.on('connect' ,  (socket)=>{
-                // Set a timeout to prevent hanging (e.g., 10 seconds)
-                // const timeout = setTimeout(() => {
-                // reject(new Error("Verification timed out"));
-                // }, 10000);
-
-                // Listen for email-verified event with a callback function
-                socket.on("email-verified", async (data) => {
-                console.log('Data: ',data)
-                // clearTimeout(timeout); // Clear the timeout on success
-                // await closeServer(server);
-                if (data.message === "Verification Verified Successfully!") {
-                    resolve(true); // Resolve with true
-                } else {
-                    reject(new Error("Unexpected verification message"));
-                }
-                });
-            })
-
-            // Handle disconnection
-            socket.on('disconnect', () => {
-                console.log('User disconnected');
-            });
- 
-        } catch (error) {
-             console.error('Internal Server Error:', error);
-             reject(error); // Reject promise on server error
-        }
-    })
-}
-
-
-
-module.exports = {serverSocket,verfiyEmailSocket}
 
 // const getFunction = async () => {
 //    await startServer(server, 4000);
