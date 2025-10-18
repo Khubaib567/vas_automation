@@ -10,7 +10,6 @@ const JWT_SECRET = process.env.JWT_SECRET;
 const EMAIL_USER = process.env.EMAIL_USER;
 const EMAIL_PASS = process.env.EMAIL_PASS;
 const BASE_URL = process.env.BASE_URL;
-const TOKEN = ''
 
 
 // Function to generate a JWT

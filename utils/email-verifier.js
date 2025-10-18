@@ -1,7 +1,10 @@
 const storage = require('node-persist');
 
-module.exports =  waitForVerification = (timeoutInMinutes = 5) => {
-  return new Promise((resolve) => {
+module.exports =  waitForVerification =  (timeoutInMinutes = 5) => {
+  return new Promise(async (resolve) => {
+
+    storage.initSync();
+    await storage.setItem('status',false)
     const startTime = Date.now();
     const timeout = timeoutInMinutes * 60 * 1000; // 5 minutes in milliseconds
 
