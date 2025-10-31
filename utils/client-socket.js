@@ -58,7 +58,7 @@ module.exports = auth = async () =>{
     
     
     } catch (error) {
-        console.error('Internal Server Error : ' , error)
+        console.error('Internal Server Error : ' + error.message)
     }
 
 

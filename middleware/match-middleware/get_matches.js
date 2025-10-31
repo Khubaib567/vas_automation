@@ -1,15 +1,20 @@
-import dotenv from 'dotenv';
-import * as cheerio from 'cheerio';
-import axios from 'axios';
-import csvParser from '../utils/csv-parser.js';
-import jsonParser from '../utils/json-parser.js';
-import fs from 'fs/promises';
-import { getLeagueUrl, getMatchDetails, getSummary } from './get_functions.js';
+// Load environment variables
+const dotenv = require('dotenv');
+const cheerio = require('cheerio');
+const axios = require('axios');
+const csvParser = require('../utils/csv-parser');
+const jsonParser = require('../utils/json-parser');
+const fs = require('fs').promises;
+
+// Import functions from another JS file
+const { getLeagueUrl, getMatchDetails, getSummary } = require('./get_functions');
 
 // Load dotenv only in non-production
 if (process.env.NODE_ENV !== 'production') {
-  dotenv.config();
+  dotenv.config({path : "../../.secrets/.env"});
 }
+
+// require("../../.secrets/.env")
 
 // Function to fetch live matches
 const get_live_match = async () => {
@@ -26,7 +31,7 @@ const get_live_match = async () => {
       console.log('System is exiting!');
       process.on('exit', code => console.log(`Exiting with code ${code}`));
       setTimeout(() => process.exit(), 5000);
-      return;
+      return "No live matches are currently playing!";
     }
 
     const matches = [];
@@ -58,6 +63,7 @@ const get_live_match = async () => {
         };
         matches.push(match);
         console.log(matches);
+        return matches
       } catch (error) {
         console.error('Error fetching match details:', error);
       }
@@ -178,7 +184,7 @@ const get_match_summary = async (league_name, date) => {
   }
 };
 
-export {
+module.exports =  {
   get_live_match,
   get_past_matches,
   get_next_matches,

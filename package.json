@@ -6,9 +6,7 @@
     "server": "node --watch --env-file-if-exists=.secrets/.env index.js",
     "socket": "node --watch --env-file-if-exists=.secrets/.env socket.js"
   },
-  "repository": {
-    "type": "git"
-  },
+  "type": "commonjs",
   "keywords": [],
   "author": "",
   "license": "ISC",
