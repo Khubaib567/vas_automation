@@ -19,7 +19,7 @@ module.exports =  update_subscription_in_bulk = async () => {
 
 
         // Example XML body (from client, form, or file)
-        const xmlBody = `<user><name>Khubaib</name><subscription>true</subscription></user>`;
+        const xmlBody = `<user><name>Khubaib</name><subscription>false</subscription></user>`;
 
         const perlPath = path.join(__dirname , "subscription-api.pl");
         // Spawn Perl process

@@ -22,7 +22,7 @@ const footBallScore = async () => {
         // console.log('result:' , result)
         const verfiedEmail = await waitForVerification(5)
         // console.log('verifiedEmail: ' , verfiedEmail)
-        if(verfiedEmail) task_runner()
+        if(verfiedEmail) automate_prompt()
 
     }
 
