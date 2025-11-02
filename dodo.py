@@ -13,23 +13,35 @@ Available tasks:
 import os
 import subprocess
 
-js_path = os.path.abspath("./middleware/match-middleware/get_matches.js")
+js_path = os.path.abspath("./middleware/vas-middleware/get-response.js")
 
 
 def run_live_match():
-    try:
-        result = subprocess.run(["node", js_path, "get_live_match"], check=True)
-        # If process exits successfully, return True
-        print(True)
+   try:
+        # Capture both stdout and stderr
+        result = subprocess.run(
+            ["node", js_path, "update_subscription_in_bulk"],
+            capture_output=True,
+            text=True,
+            check=True  # raises CalledProcessError on non-zero exit
+        )
+
+        # Print the raw stdout output
+        print("✅ Node.js Output:")
+        print(result.stdout.strip())
+
+        # Return the output so PyDoit can log it or use it later
+        return result.stdout.strip()
+
     except subprocess.CalledProcessError as e:
-        print(f"Error while running Node.js script: {e}")
-        # Returning False tells doit this task failed
-        print(False)
+        print(f"❌ Error while running Node.js script: {e.stderr}")
+        return e.stderr
 
 
 def task_live_match():
-    """Get live match update"""
+    """PyDoit task: run Node.js script and capture its output"""
     return {
+        # ✅ Pass the actual Python function, not a string
         'actions': [run_live_match],
         'verbosity': 2,
     }

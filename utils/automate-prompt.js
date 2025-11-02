@@ -1,7 +1,7 @@
 
 const prompt = require('prompt-sync')();
 const {get_live_match,get_past_matches,get_next_matches,get_match_summary} = require('../middleware/match-middleware/get_matches')    
-
+const update_subscription_in_bulk = require("../middleware/vas-middleware/get-response")
 
 
 module.exports = automate_prompt = () => {
@@ -9,7 +9,8 @@ module.exports = automate_prompt = () => {
     1-Get Live Matches 
     2-Last Match Schedule
     3-Next Match Schedule
-    4-Get Match Summary`)
+    4-Get Match Summary
+    5-Update Users Subscription in Bulk`)
 
     const option = parseInt(prompt('Please select the following options: '))
 
@@ -31,6 +32,10 @@ module.exports = automate_prompt = () => {
         const league_name = prompt('Enter the league name: ').toLowerCase().replace(' ','-')
         const date = prompt('Enter the date in given format (yyyy-mm-dd): ').replaceAll(' ','-')
         return get_match_summary(league_name,date)
+    }
+
+    else if(option == 5){
+        return update_subscription_in_bulk()
     }
     else console.log('System is exited!')
 }

@@ -9,6 +9,9 @@ const footBallScore = async () => {
    
     try {
 
+    // task_runner()
+    // automate_prompt()
+
     clientAuth();
     
     const result =  await serverAuth();
