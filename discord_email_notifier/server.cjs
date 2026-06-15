@@ -1,14 +1,17 @@
 const WebSocket = require('ws');
 const nodemailer = require('nodemailer');
 
+// 1. Initialize dotenv at the absolute top of the file
+require('dotenv').config({path : ".secrets/.env"});
+
 // ==========================================
 // 1. CONFIGURATION
 // ==========================================
-const DISCORD_BOT_TOKEN = 'YOUR_DISCORD_BOT_TOKEN'; 
-const TARGET_CHANNEL_ID = 'YOUR_LOCAL_SERVER_CHANNEL_ID'; // Target channel snowflake ID
-const GMAIL_USER = 'your-email@gmail.com';
-const GMAIL_PASS = 'your-gmail-app-password'; 
-const ADMIN_TARGET_EMAIL = 'admin-email@gmail.com';
+const DISCORD_BOT_TOKEN = process.env.DISCORD_BOT_TOKEN; 
+const TARGET_CHANNEL_ID = process.env.TARGET_CHANNEL_ID; 
+const GMAIL_USER = process.env.GMAIL_USER;
+const GMAIL_PASS = process.env.GMAIL_PASS; 
+const ADMIN_TARGET_EMAIL = process.env.ADMIN_TARGET_EMAIL;
 
 // Official Live Discord API Gateway WebSocket (v10)
 const DISCORD_GATEWAY_URL = 'wss://gateway.discord.gg/?v=10&encoding=json';
@@ -51,6 +54,7 @@ function connectToDiscordGateway() {
 
     ws.on('message', async (data) => {
         const payload = JSON.parse(data);
+        // console.log("Payload: " , payload);
         const { op, t, d } = payload;
 
         switch (op) {
